@@ -72,7 +72,7 @@ def main():
     input_of_tempo.pack(padx=8,pady=4)
     input_of_tempo.insert(0,60)
 
-    #starts and stops click
+    #starts and stops click and change tempo command
     def start_stop_click(label_value = int(input_of_tempo.get())):
         
         meteronome.stop_metronome()
@@ -88,6 +88,8 @@ def main():
             meteronome.stop_metronome()
             meteronome.start_metronome(int(input_of_tempo.get()))
             
+
+    #button for changing tempo and on and off
     start_stop_button = tk.Button(text="start",
                               command=start_stop_click)
 
