@@ -1,9 +1,8 @@
-
 import tkinter as tk
 import pygame
 import threading
 pygame.mixer.init()
-
+from gui_tabs import Gui_Tabs
 
 root = tk.Tk()
 
@@ -24,7 +23,6 @@ class Meteronome():
     
     def set_bpm_and_play(self,tempo: int = 60):
         
-
         if not self.running:
             return  # stop ticking if not running
 
@@ -73,6 +71,8 @@ def main():
     input_of_tempo.pack(padx=8,pady=4)
     input_of_tempo.insert(0,60)
 
+    
+
     #starts and stops click and change tempo command
     def start_stop_click(label_value = int(input_of_tempo.get())):
         
@@ -95,6 +95,16 @@ def main():
                               command=start_stop_click)
 
     start_stop_button.pack(padx=6,pady=4)
+
+
+    #Gui tab stuff
+    gui_tabs = Gui_Tabs(root)
+    
+    notebook = gui_tabs.tabs()
+    
+    gui_tabs.tempo_storage(notebook)
+    gui_tabs.meteronome_sound(notebook)
+
 
     
     
