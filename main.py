@@ -1,3 +1,4 @@
+
 import tkinter as tk
 import pygame
 import threading
@@ -101,5 +102,5 @@ def main():
     meteronome.stop_metronome()
     pygame.quit()
     
-
-main()
+if __name__ == "__main__":
+    main()
