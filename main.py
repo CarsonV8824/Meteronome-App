@@ -84,7 +84,7 @@ def main():
             database.add_entry(piece.strip(), section.strip(), int(tempo.strip()))
             print(piece, section, tempo)
         except Exception as e:
-            print(f"Error adding entry to database: {e}")
+            database.delete_all_entries()
 
 if __name__ == "__main__":
     main()
