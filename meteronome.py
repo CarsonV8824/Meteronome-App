@@ -2,13 +2,13 @@ import threading
 import pygame
 pygame.mixer.init()
 class Meteronome():
-    
-    def __init__(self):
+
+    def __init__(self, file='metronome_click.ogg'):
         self.timer = None
         self.running = False
         self.tempo = 60
-        self.sound = pygame.mixer.Sound('metronome_click.ogg')
-    
+        self.sound = pygame.mixer.Sound(file)
+
     def set_bpm_and_play(self,tempo: int = 60):
         
         if not self.running:

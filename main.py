@@ -85,6 +85,7 @@ def main():
             print(piece, section, tempo)
         except Exception as e:
             database.delete_all_entries()
+            print(e)
 
 if __name__ == "__main__":
     main()
