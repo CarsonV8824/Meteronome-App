@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 class Gui_Tabs():
-    def __init__(self, root, list_of_pieces:list[tuple[str,str,str]] = []):
+    def __init__(self, root:tk.Tk, list_of_pieces:list[tuple[str,str,str]] = []):
         self.root = root
         self.list_of_pieces = list_of_pieces
         
@@ -59,7 +59,12 @@ class Gui_Tabs():
         tempo_to_rember = tk.Entry(frame)
         tempo_to_rember.pack(padx=16, pady=4)
 
-        clear_button = tk.Button(frame, text="Clear Data", command=lambda: data_listbox.delete(0, tk.END))
+        def clear_data():
+            self.list_of_pieces = []
+            data_listbox.delete(0, tk.END)
+
+
+        clear_button = tk.Button(frame, text="Clear Data", command=clear_data)
         clear_button.pack(padx=8, pady=4)
 
         list_text = tk.Label(frame, text="List of Data:")
@@ -86,9 +91,21 @@ class Gui_Tabs():
                 data_listbox.insert(tk.END, data)
                 data_listbox.config(width=max(length_of_data))
 
-        self.root.bind('<Return>', lambda event: add_data())
-
         
+        def delete_selected_item(event):
+            
+            selected_indices = data_listbox.curselection()
+
+        # If an item is actually selected
+            if selected_indices:
+                data_listbox.delete(selected_indices[0])
+                self.list_of_pieces.pop(selected_indices[0])
+
+        self.root.bind('<Return>', lambda event: add_data())
+        
+        data_listbox.bind("<<ListboxSelect>>", delete_selected_item)
+
+
         data_listbox.pack(padx=8, pady=4)
 
         return tempo_storage_tab

@@ -16,13 +16,13 @@ class Start_Stop_Button_Count():
         self.count += 1
         return self.count
 
-
 database = Database()
 
 check = Start_Stop_Button_Count()
 meteronome = Meteronome()
 gui_tabs = Gui_Tabs(root, list(database.get_all_entries()))
 
+database.delete_all_entries()
 def main():
     
 
@@ -77,15 +77,14 @@ def main():
     pygame.quit()
 
     gui_tabs_data = gui_tabs.return_list_of_pieces()
-    
-    for entry in gui_tabs_data:
-        try:
-            piece, section, tempo = entry
-            database.add_entry(piece.strip(), section.strip(), int(tempo.strip()))
-            print(piece, section, tempo)
-        except Exception as e:
-            database.delete_all_entries()
-            print(e)
+    print(gui_tabs_data)
+    if gui_tabs_data == []:
+        database.delete_all_entries()
+    else:
+        print(gui_tabs_data)
+        for i in gui_tabs_data:
+            if i not in database.get_all_entries():
+                database.add_entry(i[0], i[1], i[2])
 
 if __name__ == "__main__":
     main()
