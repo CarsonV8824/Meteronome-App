@@ -1,8 +1,11 @@
 import tkinter as tk
 import pygame
 import threading
-pygame.mixer.init()
 from gui_tabs import Gui_Tabs
+from meteronome import Meteronome
+from database_class import Database
+
+pygame.mixer.init()
 
 root = tk.Tk()
 
@@ -13,50 +16,12 @@ class Start_Stop_Button_Count():
         self.count += 1
         return self.count
 
-class Meteronome():
-    
-    def __init__(self):
-        self.timer = None
-        self.running = False
-        self.tempo = 60
-        self.sound = pygame.mixer.Sound('metronome_click.ogg')
-    
-    def set_bpm_and_play(self,tempo: int = 60):
-        
-        if not self.running:
-            return  # stop ticking if not running
 
-        print("Tick")
-        self.sound.play(0)  # this is where you'd play a sound
-
-    # Schedule the next tick
-        self.tempo = tempo
-        interval = 60 / self.tempo  # seconds per beat
-        self.timer = threading.Timer(interval, self.set_bpm_and_play, args=[tempo])
-        self.timer.start()
-        
-        
-
-    def start_metronome(self,tempo: int = 60):
-        """Start ticking at the given tempo."""
-   
-        self.running = True
-        self.set_bpm_and_play(tempo)
-        
-
-    def stop_metronome(self):
-        """Stop the metronome."""
-        
-        self.running = False
-        if self.timer:
-            self.timer.cancel()
-        self.sound.stop()
-    def get_tempo(self):
-        return self.tempo
-     
+database = Database()
 
 check = Start_Stop_Button_Count()
 meteronome = Meteronome()
+gui_tabs = Gui_Tabs(root, list(database.get_all_entries()))
 
 def main():
     
@@ -98,19 +63,28 @@ def main():
 
 
     #Gui tab stuff
-    gui_tabs = Gui_Tabs(root)
     
     notebook = gui_tabs.tabs()
     
     gui_tabs.tempo_storage(notebook)
+    
+    
     gui_tabs.meteronome_sound(notebook)
 
 
-    
-    
     root.mainloop()
     meteronome.stop_metronome()
     pygame.quit()
+
+    gui_tabs_data = gui_tabs.return_list_of_pieces()
     
+    for entry in gui_tabs_data:
+        try:
+            piece, section, tempo = entry
+            database.add_entry(piece.strip(), section.strip(), int(tempo.strip()))
+            print(piece, section, tempo)
+        except Exception as e:
+            print(f"Error adding entry to database: {e}")
+
 if __name__ == "__main__":
     main()
