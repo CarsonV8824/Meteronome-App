@@ -5,8 +5,8 @@ from meteronome import Meteronome
 pygame.mixer.init()
 class Gui_Tabs():
     def __init__(self, root:tk.Tk, list_of_pieces:list[tuple[str,str,str]] = []):
-        self.root = root
-        self.list_of_pieces = list_of_pieces
+       self.list_of_pieces = list_of_pieces
+       self.root = root
         
     def tabs(self):
         tab = ttk.Notebook(self.root)
@@ -61,6 +61,9 @@ class Gui_Tabs():
         def clear_data():
             self.list_of_pieces = []
             data_listbox.delete(0, tk.END)
+            length_of_data.clear()
+            data_listbox.config(width=10)
+
 
         clear_button = tk.Button(frame, text="Clear Data", command=clear_data)
         clear_button.pack(padx=8, pady=4)
@@ -85,17 +88,24 @@ class Gui_Tabs():
                     data = f"Piece: {i[0]}, Section: {i[1]}, Tempo: {i[2]} BPM"
                     length_of_data.append(len(data))
                     data_listbox.insert(tk.END, data)
-                    data_listbox.config(width=max(length_of_data))
+                data_listbox.config(width=max(length_of_data))
 
         
         def delete_selected_item(event):
             
             selected_indices = data_listbox.curselection()
+            if not selected_indices:
+                return
 
-        # If an item is actually selected
-            if selected_indices:
-                data_listbox.delete(selected_indices[0])
-                self.list_of_pieces.pop(selected_indices[0])
+            index = selected_indices[0]
+            
+            data_listbox.delete(index)
+            if 0 <= index < len(self.list_of_pieces):
+                self.list_of_pieces.pop(index)
+            if 0 <= index < len(length_of_data):
+                length_of_data.pop(index)
+
+            data_listbox.config(width=max(length_of_data) if length_of_data else 10)
 
         self.root.bind('<Return>', lambda event: add_data())
         
