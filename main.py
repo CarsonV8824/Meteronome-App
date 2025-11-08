@@ -86,5 +86,7 @@ def main():
             if i not in database.get_all_entries():
                 database.add_entry(i[0], i[1], i[2])
 
+    database.close()
+
 if __name__ == "__main__":
     main()
