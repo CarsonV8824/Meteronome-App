@@ -42,5 +42,10 @@ class Meteronome():
     def get_tempo(self):
         return self.tempo
     
+    def change_sound(self, sound_file):
+        try:
+            self.sound = pygame.mixer.Sound(sound_file)
+        except pygame.error as e:
+            print(f"Error loading sound file: {e}")
 
 pygame.quit()

@@ -28,7 +28,7 @@ def main():
 
 
     #label that lists the tempo marking
-    tempo_label = tk.Label(text="60",)
+    tempo_label = tk.Label(text="60 BPM")
     tempo_label.pack(padx=4,pady=4)
 
     #user input of tempo they want
@@ -43,7 +43,7 @@ def main():
         
         meteronome.stop_metronome()
         meteronome.start_metronome(label_value)
-        tempo_label.config(text = input_of_tempo.get())
+        tempo_label.config(text = input_of_tempo.get() + " BPM")
         count = check.add_count()
         if count % 2 == 0:
             start_stop_button.config(text="start")
@@ -52,8 +52,11 @@ def main():
         elif count % 2 == 1:
             start_stop_button.config(text="stop")
             meteronome.stop_metronome()
-            meteronome.start_metronome(int(input_of_tempo.get()))
             
+            try:
+                meteronome.start_metronome(int(input_of_tempo.get()))
+            except ValueError:
+                pass
 
     #button for changing tempo and on and off
     start_stop_button = tk.Button(text="start",
@@ -62,17 +65,19 @@ def main():
     start_stop_button.pack(padx=6,pady=4)
 
 
+
     #Gui tab stuff
     
     notebook = gui_tabs.tabs()
     
     gui_tabs.tempo_storage(notebook)
     
-    
-    gui_tabs.meteronome_sound(notebook)
-
+    gui_tabs.meteronome_sound(notebook, meteronome)
 
     root.mainloop()
+    
+    
+    
     meteronome.stop_metronome()
     pygame.quit()
 
