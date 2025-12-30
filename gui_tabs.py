@@ -218,10 +218,14 @@ class Gui_Tabs():
 
         img = Image.open(file_path)
         self.root.update_idletasks()
-        root_width = self.root.winfo_width()
+        #root_width = self.root.winfo_width()
         orig_width, orig_height = img.size
-        new_height = int((root_width / orig_width) * orig_height)
-        img_resized = img.resize((root_width, new_height), Image.LANCZOS)
+        max_width = min(self.root.winfo_width(), orig_width)
+        if orig_width > max_width:
+            new_height = int((max_width / orig_width) * orig_height)
+            img_resized = img.resize((max_width, new_height), Image.LANCZOS)
+        else:
+            img_resized = img
 
         # Save as BLOB
         buffer = io.BytesIO()
