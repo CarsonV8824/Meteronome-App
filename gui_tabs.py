@@ -1,8 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
 import pygame
 from meteronome import Meteronome
+from PIL import Image, ImageTk
+
 pygame.mixer.init()
+
 class Gui_Tabs():
     def __init__(self, root:tk.Tk, list_of_pieces:list[tuple[str,str,str]] = []):
        self.list_of_pieces = list_of_pieces
@@ -154,5 +158,68 @@ class Gui_Tabs():
             meteronome_instance.change_sound(sound_file)
         except pygame.error as e:
             print(f"Error loading sound file: {e}")
+
+    def upload_music(self, notebook:ttk.Notebook):
+        
+        upload_music_tab = ttk.Frame(notebook)
+        notebook.add(upload_music_tab, text="Upload Music Tab")
+
+        canvas = tk.Canvas(upload_music_tab)
+        scrollbar = ttk.Scrollbar(upload_music_tab, orient="vertical", command=canvas.yview)
+        scrollable_frame_a = ttk.Frame(canvas)
+
+        scrollable_frame_a.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        canvas.create_window((0, 0), window=scrollable_frame_a, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        frame = tk.Frame(scrollable_frame_a)
+        frame.pack()
+
+        #===================================================================================
+        
+        
+        def open_image():
+            file_path = filedialog.askopenfilename(
+                filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.gif")]
+            )
+            if not file_path:
+                return
+            
+
+            img = Image.open(file_path)
+            
+            # Assume 'root' is your Tkinter root window and 'img' is your PIL image
+            self.root.update_idletasks()  # Make sure geometry info is updated
+            root_width = self.root.winfo_width()
+
+            # Get original image size
+            orig_width, orig_height = img.size
+
+            # Calculate new height to maintain aspect ratio
+            new_height = int((root_width / orig_width) * orig_height)
+
+            # Resize image
+            img_resized = img.resize((root_width, new_height), Image.LANCZOS)
+            photo = ImageTk.PhotoImage(img_resized)
+
+            image.config(image=photo)
+            image.image = photo
+
+        
+        
+        image_choose_button = tk.Button(frame, text="Upload Image", command=open_image)
+        image_choose_button.pack()
+
+        image_holder_canvas = ttk.Frame(frame)
+        image_holder_canvas.pack()
+
+        image = tk.Label(image_holder_canvas)
+        image.pack()
+
+        return upload_music_tab
 
 pygame.quit()

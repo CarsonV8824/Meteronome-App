@@ -74,9 +74,9 @@ def main():
     
     gui_tabs.meteronome_sound(notebook, meteronome)
 
+    gui_tabs.upload_music(notebook)
+
     root.mainloop()
-    
-    
     
     meteronome.stop_metronome()
     pygame.quit()
