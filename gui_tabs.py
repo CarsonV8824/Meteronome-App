@@ -5,6 +5,7 @@ import pygame
 from meteronome import Meteronome
 from PIL import Image, ImageTk
 import io
+import fitz  
 from image_database import PhotoDatabase
 
 pygame.mixer.init()
@@ -209,44 +210,67 @@ class Gui_Tabs():
 
         return upload_music_tab
     
+    
+
     def open_image(self, image_holder_canvas):
         file_path = filedialog.askopenfilename(
-            filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.gif")]
+            filetypes=[("Image and PDF Files", "*.png;*.jpg;*.jpeg;*.gif;*.pdf")]
         )
         if not file_path:
             return
-
-        img = Image.open(file_path)
-        self.root.update_idletasks()
-        #root_width = self.root.winfo_width()
-        orig_width, orig_height = img.size
-        max_width = min(self.root.winfo_width(), orig_width)
-        if orig_width > max_width:
-            new_height = int((max_width / orig_width) * orig_height)
-            img_resized = img.resize((max_width, new_height), Image.LANCZOS)
-        else:
-            img_resized = img
-
-        # Save as BLOB
-        buffer = io.BytesIO()
-        img_resized.save(buffer, format='PNG')
-        image_blob = buffer.getvalue()
-        self.images.append(image_blob)
-        self.image_connection.add_data(image_blob)  # Only once
 
         # Clear previous images in the holder
         for widget in image_holder_canvas.winfo_children():
             widget.destroy()
         self.photo_refs = []
 
-        # Display all images from the list
-        for image_bytes in self.images:
-            real_image = Image.open(io.BytesIO(image_bytes))
-            photo = ImageTk.PhotoImage(real_image)
+        if file_path.lower().endswith('.pdf'):
+            doc = fitz.open(file_path)
+            for page in doc:
+                pix = page.get_pixmap()
+                img_data = pix.tobytes("png")
+                img = Image.open(io.BytesIO(img_data))
+                self.root.update_idletasks()
+                orig_width, orig_height = img.size
+                max_width = min(self.root.winfo_width(), orig_width)
+                if orig_width > max_width:
+                    new_height = int((max_width / orig_width) * orig_height)
+                    img_resized = img.resize((max_width, new_height), Image.LANCZOS)
+                else:
+                    img_resized = img
+
+                buffer = io.BytesIO()
+                img_resized.save(buffer, format='PNG')
+                image_blob = buffer.getvalue()
+                self.images.append(image_blob)
+                self.image_connection.add_data(image_blob)
+
+                photo = ImageTk.PhotoImage(img_resized)
+                lbl = tk.Label(image_holder_canvas, image=photo)
+                lbl.pack()
+                self.photo_refs.append(photo)
+        else:
+            img = Image.open(file_path)
+            self.root.update_idletasks()
+            orig_width, orig_height = img.size
+            max_width = min(self.root.winfo_width(), orig_width)
+            if orig_width > max_width:
+                new_height = int((max_width / orig_width) * orig_height)
+                img_resized = img.resize((max_width, new_height), Image.LANCZOS)
+            else:
+                img_resized = img
+
+            buffer = io.BytesIO()
+            img_resized.save(buffer, format='PNG')
+            image_blob = buffer.getvalue()
+            self.images.append(image_blob)
+            self.image_connection.add_data(image_blob)
+
+            photo = ImageTk.PhotoImage(img_resized)
             lbl = tk.Label(image_holder_canvas, image=photo)
             lbl.pack()
             self.photo_refs.append(photo)
-
+    
     def clear_images(self, image_holder_canvas):
         
         for widget in image_holder_canvas.winfo_children():
