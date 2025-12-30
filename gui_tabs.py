@@ -4,6 +4,8 @@ from tkinter import filedialog
 import pygame
 from meteronome import Meteronome
 from PIL import Image, ImageTk
+import io
+from image_database import PhotoDatabase
 
 pygame.mixer.init()
 
@@ -11,6 +13,13 @@ class Gui_Tabs():
     def __init__(self, root:tk.Tk, list_of_pieces:list[tuple[str,str,str]] = []):
        self.list_of_pieces = list_of_pieces
        self.root = root
+       self.image_connection = PhotoDatabase()
+       try:
+           self.images = [row[1] for row in self.image_connection.get_data()]
+       except Exception:
+            self.images = []
+       
+       self.photo_refs = []
         
     def tabs(self):
         tab = ttk.Notebook(self.root)
@@ -180,46 +189,68 @@ class Gui_Tabs():
         frame.pack()
 
         #===================================================================================
-        
-        
-        def open_image():
-            file_path = filedialog.askopenfilename(
-                filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.gif")]
-            )
-            if not file_path:
-                return
             
-
-            img = Image.open(file_path)
-            
-            # Assume 'root' is your Tkinter root window and 'img' is your PIL image
-            self.root.update_idletasks()  # Make sure geometry info is updated
-            root_width = self.root.winfo_width()
-
-            # Get original image size
-            orig_width, orig_height = img.size
-
-            # Calculate new height to maintain aspect ratio
-            new_height = int((root_width / orig_width) * orig_height)
-
-            # Resize image
-            img_resized = img.resize((root_width, new_height), Image.LANCZOS)
-            photo = ImageTk.PhotoImage(img_resized)
-
-            image.config(image=photo)
-            image.image = photo
-
-        
-        
-        image_choose_button = tk.Button(frame, text="Upload Image", command=open_image)
+        image_choose_button = tk.Button(frame, text="Upload Image", command=lambda:self.open_image(image_holder_canvas=image_holder_canvas))
         image_choose_button.pack()
+
+        image_clear_button = tk.Button(frame, text="Clear Images", command=lambda:self.clear_images(image_holder_canvas=image_holder_canvas))
+        image_clear_button.pack()
 
         image_holder_canvas = ttk.Frame(frame)
         image_holder_canvas.pack()
 
-        image = tk.Label(image_holder_canvas)
-        image.pack()
+        if self.images != []:
+            for saved_image in self.images:
+                real_image = Image.open(io.BytesIO(saved_image))  # Use saved_image directly
+                photo = ImageTk.PhotoImage(real_image)
+                lbl = tk.Label(image_holder_canvas, image=photo)
+                lbl.pack()
+                self.photo_refs.append(photo)
 
         return upload_music_tab
+    
+    def open_image(self, image_holder_canvas):
+        file_path = filedialog.askopenfilename(
+            filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.gif")]
+        )
+        if not file_path:
+            return
+
+        img = Image.open(file_path)
+        self.root.update_idletasks()
+        root_width = self.root.winfo_width()
+        orig_width, orig_height = img.size
+        new_height = int((root_width / orig_width) * orig_height)
+        img_resized = img.resize((root_width, new_height), Image.LANCZOS)
+
+        # Save as BLOB
+        buffer = io.BytesIO()
+        img_resized.save(buffer, format='PNG')
+        image_blob = buffer.getvalue()
+        self.images.append(image_blob)
+        self.image_connection.add_data(image_blob)  # Only once
+
+        # Clear previous images in the holder
+        for widget in image_holder_canvas.winfo_children():
+            widget.destroy()
+        self.photo_refs = []
+
+        # Display all images from the list
+        for image_bytes in self.images:
+            real_image = Image.open(io.BytesIO(image_bytes))
+            photo = ImageTk.PhotoImage(real_image)
+            lbl = tk.Label(image_holder_canvas, image=photo)
+            lbl.pack()
+            self.photo_refs.append(photo)
+
+    def clear_images(self, image_holder_canvas):
+        
+        for widget in image_holder_canvas.winfo_children():
+            widget.destroy()
+            
+            self.images = []
+            self.photo_refs = []
+            
+            self.image_connection.clear_data()
 
 pygame.quit()

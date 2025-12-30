@@ -1,8 +1,8 @@
 import sqlite3
 
-class Database():
+class TempoDatabase():
 
-    def __init__(self, db_name='meteronome_data.db'):
+    def __init__(self, db_name='tempo_data.sqlite3'):
         self.connection = sqlite3.connect(db_name)
         self.cursor = self.connection.cursor()
         self.create_table()
@@ -35,3 +35,6 @@ class Database():
     def delete_all_entries(self):
         self.cursor.execute('DELETE FROM metronome_data')
         self.connection.commit()
+
+    def __del__(self):
+        self.connection.close()

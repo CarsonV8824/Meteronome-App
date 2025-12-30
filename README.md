@@ -5,6 +5,7 @@ A Tkinter-based desktop application for musicians to store tempo information, ma
 ## ✨ Features
 
 - 📝 Store and manage a list of musical pieces, sections, and tempos
+- 📝 Store and manage your uploaded sheetmusic
 - ➕ Add, 🗑️ delete, and 🧹 clear tempo data
 - 🖼️ Upload and display images (e.g., sheet music)
 - 🔊 Switch between different metronome sounds

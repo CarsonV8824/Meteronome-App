@@ -3,7 +3,7 @@ import pygame
 import threading
 from gui_tabs import Gui_Tabs
 from meteronome import Meteronome
-from database_class import Database
+from tempo_database import TempoDatabase
 
 pygame.mixer.init()
 
@@ -16,13 +16,13 @@ class Start_Stop_Button_Count():
         self.count += 1
         return self.count
 
-database = Database()
+bpm_database = TempoDatabase()
 
 check = Start_Stop_Button_Count()
 meteronome = Meteronome()
-gui_tabs = Gui_Tabs(root, list(database.get_all_entries()))
+gui_tabs = Gui_Tabs(root, list(bpm_database.get_all_entries()))
 
-database.delete_all_entries()
+bpm_database.delete_all_entries()
 def main():
     
 
@@ -84,14 +84,14 @@ def main():
     gui_tabs_data = gui_tabs.return_list_of_pieces()
     print(gui_tabs_data)
     if gui_tabs_data == []:
-        database.delete_all_entries()
+        bpm_database.delete_all_entries()
     else:
         print(gui_tabs_data)
         for i in gui_tabs_data:
-            if i not in database.get_all_entries():
-                database.add_entry(i[0], i[1], i[2])
+            if i not in bpm_database.get_all_entries():
+                bpm_database.add_entry(i[0], i[1], i[2])
 
-    database.close()
+    bpm_database.close()
 
 if __name__ == "__main__":
     main()
