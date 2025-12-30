@@ -26,6 +26,7 @@ A Tkinter-based desktop application for musicians to store tempo information, ma
    - 🐍 `tkinter`
    - 🎮 `pygame`
    - 🖼️ `Pillow`
+   - 📄 `fitz`
 
 ## ▶️ Usage
 
