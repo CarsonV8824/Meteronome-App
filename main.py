@@ -72,9 +72,11 @@ def main():
     
     gui_tabs.tempo_storage(notebook)
     
+    gui_tabs.upload_music(notebook)
+
     gui_tabs.meteronome_sound(notebook, meteronome)
 
-    gui_tabs.upload_music(notebook)
+    
 
     root.mainloop()
     
