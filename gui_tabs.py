@@ -1,5 +1,6 @@
-import tkinter as tk
 from tkinter import ttk
+import tkinter as tk
+from ttkthemes import ThemedTk
 from tkinter import filedialog
 import pygame
 from meteronome import Meteronome
@@ -11,7 +12,7 @@ from image_database import PhotoDatabase
 pygame.mixer.init()
 
 class Gui_Tabs():
-    def __init__(self, root:tk.Tk, list_of_pieces:list[tuple[str,str,str]] = []):
+    def __init__(self, root:ThemedTk, list_of_pieces:list[tuple[str,str,str]] = []):
        self.list_of_pieces = list_of_pieces
        self.root = root
        self.image_connection = PhotoDatabase()
@@ -44,7 +45,7 @@ class Gui_Tabs():
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
         
-        frame = tk.Frame(scrollable_frame)
+        frame = ttk.Frame(scrollable_frame)
         frame.pack()
         #=======================================================================================================#
         
@@ -56,20 +57,20 @@ class Gui_Tabs():
             data_listbox.insert(tk.END, data)
             data_listbox.config(width=max(length_of_data))
         
-        text_piece = tk.Label(frame, text="Piece to Remember:")
+        text_piece = ttk.Label(frame, text="Piece to Remember:")
         text_piece.pack(padx=8, pady=4)
-        pieces_to_rember = tk.Entry(frame)
+        pieces_to_rember = ttk.Entry(frame)
         pieces_to_rember.pack(padx=8,pady=4)
         
-        text_section_piece = tk.Label(frame, text="Section of Piece:")
+        text_section_piece = ttk.Label(frame, text="Section of Piece:")
         text_section_piece.pack(padx=8, pady=4)
         
-        section_to_rember = tk.Entry(frame)
+        section_to_rember = ttk.Entry(frame)
         section_to_rember.pack(padx=16, pady=4)
 
-        text_tempo = tk.Label(frame, text="Tempo with piece:")
+        text_tempo = ttk.Label(frame, text="Tempo with piece:")
         text_tempo.pack(padx=8, pady=4)
-        tempo_to_rember = tk.Entry(frame)
+        tempo_to_rember = ttk.Entry(frame)
         tempo_to_rember.pack(padx=16, pady=4)
 
         def clear_data():
@@ -79,10 +80,10 @@ class Gui_Tabs():
             data_listbox.config(width=10)
 
 
-        clear_button = tk.Button(frame, text="Clear Data", command=clear_data)
+        clear_button = ttk.Button(frame, text="Clear Data", command=clear_data)
         clear_button.pack(padx=8, pady=4)
 
-        list_text = tk.Label(frame, text="List of Data:")
+        list_text = ttk.Label(frame, text="List of Data:")
         list_text.pack(padx=8, pady=4)
         
         def add_data():
@@ -155,10 +156,10 @@ class Gui_Tabs():
        
         #=======================================================================================================#
 
-        default_button = tk.Button(frame, text="Default", command=lambda:self.change_meteronome_sound('metronome_click.ogg', meteronome_instance))
+        default_button = ttk.Button(frame, text="Default", command=lambda:self.change_meteronome_sound('metronome_click.ogg', meteronome_instance))
         default_button.pack(side="top", padx=8, pady=4)
 
-        wood_block_button = tk.Button(frame, text="Woodblock", command=lambda:self.change_meteronome_sound('wood_block.ogg', meteronome_instance))
+        wood_block_button = ttk.Button(frame, text="Woodblock", command=lambda:self.change_meteronome_sound('wood_block.ogg', meteronome_instance))
         wood_block_button.pack(side="top", padx=8, pady=4)
 
         return meteronome_sound_tab
@@ -191,10 +192,10 @@ class Gui_Tabs():
 
         #===================================================================================
             
-        image_choose_button = tk.Button(frame, text="Upload Image", command=lambda:self.open_image(image_holder_canvas=image_holder_canvas))
+        image_choose_button = ttk.Button(frame, text="Upload Image", command=lambda:self.open_image(image_holder_canvas=image_holder_canvas))
         image_choose_button.pack()
 
-        image_clear_button = tk.Button(frame, text="Clear Images", command=lambda:self.clear_images(image_holder_canvas=image_holder_canvas))
+        image_clear_button = ttk.Button(frame, text="Clear Images", command=lambda:self.clear_images(image_holder_canvas=image_holder_canvas))
         image_clear_button.pack()
 
         image_holder_canvas = ttk.Frame(frame)

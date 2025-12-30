@@ -1,4 +1,5 @@
-import tkinter as tk
+from tkinter import ttk
+from ttkthemes import ThemedTk
 import pygame
 import threading
 from gui_tabs import Gui_Tabs
@@ -7,7 +8,7 @@ from tempo_database import TempoDatabase
 
 pygame.mixer.init()
 
-root = tk.Tk()
+root = ThemedTk(theme="breeze")
 
 class Start_Stop_Button_Count():
     def __init__(self):
@@ -28,11 +29,11 @@ def main():
 
 
     #label that lists the tempo marking
-    tempo_label = tk.Label(text="60 BPM")
+    tempo_label = ttk.Label(text="60 BPM")
     tempo_label.pack(padx=4,pady=4)
 
     #user input of tempo they want
-    input_of_tempo = tk.Entry(root)
+    input_of_tempo = ttk.Entry(root)
     input_of_tempo.pack(padx=8,pady=4)
     input_of_tempo.insert(0,60)
 
@@ -59,7 +60,7 @@ def main():
                 pass
 
     #button for changing tempo and on and off
-    start_stop_button = tk.Button(text="start",
+    start_stop_button = ttk.Button(text="start",
                               command=start_stop_click)
 
     start_stop_button.pack(padx=6,pady=4)
