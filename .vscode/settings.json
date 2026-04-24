@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+    "first prototype": true,
+    "__pycache__": true,
+    ".venv": true
+    }
+}

@@ -1,6 +1,6 @@
 [
     { "name": "Largo", "min_bpm": 40, "max_bpm": 60 },
-    { "name": "Lento", "min_bpm": 45, "max_bpm": 60 },
+    { "name": "Lento", "min_bpm": 45, "max_bpm": 65 },
     { "name": "Adagio", "min_bpm": 66, "max_bpm": 76 },
     { "name": "Adagietto", "min_bpm": 70, "max_bpm": 80 },
     { "name": "Andante", "min_bpm": 76, "max_bpm": 108 },
