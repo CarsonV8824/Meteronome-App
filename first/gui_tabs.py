@@ -3,11 +3,11 @@ import tkinter as tk
 from ttkthemes import ThemedTk
 from tkinter import filedialog
 import pygame
-from meteronome import Meteronome
+from prototype.meteronome import Meteronome
 from PIL import Image, ImageTk
 import io
 import fitz  
-from image_database import PhotoDatabase
+from prototype.image_database import PhotoDatabase
 
 pygame.mixer.init()
 
