@@ -1,0 +1,15 @@
+[
+    { "name": "Largo", "min_bpm": 40, "max_bpm": 60 },
+    { "name": "Lento", "min_bpm": 45, "max_bpm": 60 },
+    { "name": "Adagio", "min_bpm": 66, "max_bpm": 76 },
+    { "name": "Adagietto", "min_bpm": 70, "max_bpm": 80 },
+    { "name": "Andante", "min_bpm": 76, "max_bpm": 108 },
+    { "name": "Andantino", "min_bpm": 80, "max_bpm": 108 },
+    { "name": "Moderato", "min_bpm": 108, "max_bpm": 120 },
+    { "name": "Allegretto", "min_bpm": 100, "max_bpm": 128 },
+    { "name": "Allegro", "min_bpm": 120, "max_bpm": 156 },
+    { "name": "Vivace", "min_bpm": 156, "max_bpm": 176 },
+    { "name": "Vivacissimo", "min_bpm": 172, "max_bpm": 176 },
+    { "name": "Presto", "min_bpm": 168, "max_bpm": 200 },
+    { "name": "Prestissimo", "min_bpm": 200, "max_bpm": 220 }
+]
